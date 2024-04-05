@@ -1,4 +1,4 @@
-﻿State,Total EVs (2),Level 1 Ports (1),Level 2 Ports (1),DCFC Ports (1),Total Ports (1),Ratio: EVs to Charger Ports
+﻿State,Total EVs (2),Level 1 Ports (1),Level 2 Ports (1),DCFC Ports (1),Total Ports (1),Ratio of EVs to Charger Ports
 California,930811,280,27762,6143,34185,27.23
 Florida,108749,35,4557,1052,5644,19.27
 New York,106024,15,5774,758,6547,16.19
@@ -51,5 +51,5 @@ South Dakota,1015,0,84,63,147,6.9
 Wyoming,707,4,90,75,169,4.18
 North Dakota,656,0,73,61,134,4.9
 Median,14684,7,685,195,937,14.2
-Average,42099,25.6,1727,391,2143,14.6
-Total,2147070,1305,88070,19932,109307,
+Average,42099,26,1727,391,2143,14.6
+Total,2147070,1305,88070,19932,109307,0
