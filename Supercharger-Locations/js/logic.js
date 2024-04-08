@@ -1,20 +1,18 @@
 import { API_KEY } from './config.js';  
 var url = 'https://supercharge.info/service/supercharge/allSites'; 
-var gpsLayer; 
+// Create overlay layers 
+var npLayer = L.layerGroup(); // Declare npLayer variable  
+var NationalParksLayer = L.layerGroup(); // Declare NationalParksLayer variable
+var gpsLayer = L.layerGroup(); // Declare gpsLayer variable
 var gpsMarkers = []; // Define gpsMarkers array
-var npMarkers = [];
+var npMarkers = []; // Define gpsMarkers array
 // Define base layers 
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {     
     attribution: '© OpenStreetMap contributors' 
 });  
-
 var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {     
     attribution: '© OpenTopoMap contributors' 
 });  
-
-// Create overlay layers 
-var npLayer = L.layerGroup(); // Declare gpsLayer variable  
-var NationalParksLayer = L.layerGroup();
 // Define baseMaps and overlayMaps 
 var baseMaps = {     
     "Street Map": street,     
