@@ -64,15 +64,8 @@ d3.json(url).then(function(response) {
             layer: NationalParksLayer,
             checked: true // Display the National Parks overlay by default
         }
-    };
-
-// Add the overlay layers to the map without user interaction
-for (var key in overlayMaps) {
-    var overlay = overlayMaps[key];
-    overlay.layer.addTo(myMap);
-}
-
-// Create the Layer Control with the baseMaps, overlayMaps, and position it in the top right corner
+    }
+// Create the Layer Control with the baseMaps, overlayMaps, and position it in the middle right corner
 L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(myMap);
     } else {
         console.log("Response data is not in the expected format or is empty.");
