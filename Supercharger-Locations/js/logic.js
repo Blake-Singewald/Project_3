@@ -26,7 +26,7 @@ d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
     marker.addTo(myMap);
     npMarkers.push(marker); // Add the marker to npMarkers array
       marker.bindPopup(`<b>${park.name}</b><br>${park.location}`);
-      marker.addTo(myMap);
+      // marker.addTo(myMap);
   });
 //  NationalParksLayer = L.layerGroup(npMarkers);
 });
