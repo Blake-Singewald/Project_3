@@ -58,7 +58,7 @@ d3.json(url).then(function(response) {
         var overlayMaps = {
         "SuperChargers": {
             layer: gpsLayer,
-            checked: true // Display the SuperChargers overlay by default
+            checked: false // Display the SuperChargers overlay by default
         },
         "National Parks": {
             layer: NationalParksLayer,
@@ -72,9 +72,8 @@ for (var key in overlayMaps) {
     overlay.layer.addTo(myMap);
 }
 
-// Create the Layer Control with the baseMaps and overlayMaps
-L.control.layers(baseMaps, overlayMaps).addTo(myMap);
-
+// Create the Layer Control with the baseMaps, overlayMaps, and position it in the top right corner
+L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(myMap);
     } else {
         console.log("Response data is not in the expected format or is empty.");
     }
