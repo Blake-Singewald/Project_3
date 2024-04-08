@@ -58,15 +58,14 @@ d3.json(url).then(function(response) {
         var overlayMaps = {
         "SuperChargers": {
             layer: gpsLayer,
-            checked: false // Display the SuperChargers overlay by default
+            checked: false // Don't display the SuperChargers overlay by default
         },
         "National Parks": {
             layer: NationalParksLayer,
             checked: true // Display the National Parks overlay by default
-        }
-    }
-// Create the Layer Control with the baseMaps, overlayMaps, and position it in the middle right corner
-L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(myMap);
+        };
+        // Create the Layer Control with the baseMaps, overlayMaps, and position it in the middle right corner
+        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(myMap);
     } else {
         console.log("Response data is not in the expected format or is empty.");
     }
