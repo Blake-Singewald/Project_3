@@ -54,11 +54,27 @@ d3.json(url).then(function(response) {
         gpsMarkers.forEach(function(marker) {
             gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
         });
-        var overlayMaps = {     
-            "SuperChargers": gpsLayer, // Use the gpsLayer variable defined inside the d3.json block
-            "National Parks": NationalParksLayer // Add NationalParksLayer to overlayMaps after it's assigned
-        }; 
-        L.control.layers(baseMaps, overlayMaps).addTo(myMap);
+        // Define overlayMaps with the desired overlay layers and set 'checked' to true for the layers you want to be displayed by default
+        var overlayMaps = {
+        "SuperChargers": {
+            layer: gpsLayer,
+            checked: true // Display the SuperChargers overlay by default
+        },
+        "National Parks": {
+            layer: NationalParksLayer,
+            checked: true // Display the National Parks overlay by default
+        }
+    };
+
+// Add the overlay layers to the map without user interaction
+for (var key in overlayMaps) {
+    var overlay = overlayMaps[key];
+    overlay.layer.addTo(myMap);
+}
+
+// Create the Layer Control with the baseMaps and overlayMaps
+L.control.layers(baseMaps, overlayMaps).addTo(myMap);
+
     } else {
         console.log("Response data is not in the expected format or is empty.");
     }
