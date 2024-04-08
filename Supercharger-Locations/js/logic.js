@@ -55,8 +55,8 @@ d3.json(url).then(function(response) {
             gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
         });
         var overlayMaps = {     
-            "SuperChargers": gpsLayer, checked: true, // Don't display the SuperChargers overlay by default
-            "National Parks": NationalParksLayer, checked: true // Add NationalParksLayer to overlayMaps after it's assigned
+            "SuperChargers": gpsLayer, // Don't display the SuperChargers overlay by default
+            "National Parks": NationalParksLayer // Add NationalParksLayer to overlayMaps after it's assigned
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
     } else {
