@@ -71,12 +71,14 @@ d3.json(url).then(function(response) {
     } else {
         console.log("Response data is not in the expected format or is empty.");
     }
-});  
+}).catch(function(error) {
+    console.error("Error loading data:", error);
+});
 // Create the map and add Layer Control 
 let myMap = L.map("map", {     
     center: [37.09, -95.71],     
     zoom: 5,     
-    layers: [topo] // Set the default base layer 
+    layers: [street] // Set the default base layer 
 });  
 
 // function createMap(supercharge) {
