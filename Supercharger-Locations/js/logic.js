@@ -29,11 +29,6 @@ d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
       marker.addTo(myMap);
   });
   NationalParksLayer = L.layerGroup(npMarkers);
-  gpsLayer.addTo(myMap);
-  var overlayMaps = {     
-           "National Parks": NationalParksLayer 
-  }; 
-  L.control.layers(baseMaps, overlayMaps).addTo(myMap);
 });
 // Fetch data from the API using d3.json 
 d3.json(url).then(function(response) {     
@@ -63,7 +58,7 @@ d3.json(url).then(function(response) {
         gpsLayer.addTo(myMap);
         var overlayMaps = {     
             "SuperChargers": gpsLayer, // Use the gpsLayer variable defined inside the d3.json block
-            "National Parks": NationalParksLayer 
+            "National Parks": NationalParksLayer // Add NationalParksLayer to overlayMaps after it's assigned
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
     } else {
