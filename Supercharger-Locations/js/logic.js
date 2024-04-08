@@ -24,9 +24,8 @@ d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
     var marker = L.marker([park.lat, park.lng]);
     marker.bindPopup(`<b>${park.name}</b><br>${park.location}`);
     npMarkers.push(marker); // Add the marker to npMarkers array
-    marker.addTo(myMap);
+    NationalParksLayer.addLayer(marker); // Add the marker to NationalParksLayer
   });
-NationalParksLayer = L.layerGroup(npMarkers);
 });
 // Fetch data from the API using d3.json 
 d3.json(url).then(function(response) {     
@@ -52,8 +51,9 @@ d3.json(url).then(function(response) {
             gpsMarkers.push(circleMarker);     
         });
 
-        gpsLayer = L.layerGroup(gpsMarkers);
-        gpsLayer.addTo(myMap);
+        gpsMarkers.forEach(function(marker) {
+            gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
+        });
         var overlayMaps = {     
             "SuperChargers": gpsLayer, // Use the gpsLayer variable defined inside the d3.json block
             "National Parks": NationalParksLayer // Add NationalParksLayer to overlayMaps after it's assigned
