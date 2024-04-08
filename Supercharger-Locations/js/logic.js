@@ -27,17 +27,7 @@ d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
     NationalParksLayer.addLayer(marker); // Add the marker to NationalParksLayer
   });
 });
-// Define overlayMaps with the desired overlay layers and set 'checked' to true for the layers you want to be displayed by default
-var overlayMaps = {
-    "SuperChargers": {
-        layer: gpsLayer,
-        checked: false // Don't display the SuperChargers overlay by default
-    },
-    "National Parks": {
-        layer: NationalParksLayer,
-        checked: true // Display the National Parks overlay by default
-    }
-};
+
 // Fetch data from the API using d3.json 
 d3.json(url).then(function(response) {     
    // console.log(response); // Check the response data
@@ -65,7 +55,17 @@ d3.json(url).then(function(response) {
         gpsMarkers.forEach(function(marker) {
             gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
         });
-
+        // Define overlayMaps with the desired overlay layers and set 'checked' to true for the layers you want to be displayed by default
+        var overlayMaps = {
+            "SuperChargers": {
+                layer: gpsLayer,
+                checked: false // Don't display the SuperChargers overlay by default
+            },
+            "National Parks": {
+                layer: NationalParksLayer,
+                checked: true // Display the National Parks overlay by default
+            }
+        };
         // Create the Layer Control with the baseMaps, overlayMaps, and position it in the middle right corner
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(myMap);
     } else {
