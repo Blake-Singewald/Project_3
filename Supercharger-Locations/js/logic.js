@@ -57,14 +57,8 @@ d3.json(url).then(function(response) {
         });
         // Define overlayMaps with the desired overlay layers and set 'checked' to true for the layers you want to be displayed by default
         var overlayMaps = {
-            "SuperChargers": {
-                layer: gpsLayer,
-                checked: false // Don't display the SuperChargers overlay by default
-            },
-            "National Parks": {
-                layer: NationalParksLayer,
-                checked: true // Display the National Parks overlay by default
-            }
+            "SuperChargers": gpsLayer,
+            "National Parks": NationalParksLayer
         };
         // Create the Layer Control with the baseMaps, overlayMaps, and position it in the middle right corner
         L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(myMap);
