@@ -69,3 +69,44 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street] // Set the default base layer 
 });  
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function() {
+        var div = L.DomUtil.create('div', 'info legend');
+        var stall_count = [1, 6, 9, 12, 24, 36];
+        var labels = [];
+        var legendInfo = "<h3>Stall Count</h3>";
+        div.innerHTML = legendInfo;
+        for (var i = 0; i < stall_count.length; i++) {
+            labels.push('<li style="background-color:' + scColor(stall_count[i] + 1) + '"> <span>' + stall_count[i] + (stall_count[i + 1] ? '&ndash;' + stall_count[i + 1] + '' : '+') + '</span></li>');
+        }
+        div.innerHTML += '<ul>' + labels.join('') + '</ul>';
+        
+        return div;
+    };
+    legend.addTo(myMap);
+
+    function markerSize(stall_count) {
+        // Multiply the stall count by 200 to make the radius 200 times bigger
+        return stall_count * 200;
+    }
+function scColor(stall_count) {
+    if (stall_count <= 6) {
+        return '#a7fb09'
+    } else if (stall_count <= 9) {
+        return '#dcf900'
+    } else if (stall_count <= 12) {
+        return '#f6de1a'
+    } else if (stall_count <= 16) {
+        return '#f69a1a'
+    } else if (stall_count <= 20) {
+        return '#f66a1a'
+    } else if (stall_count <= 24) {
+        return '#f63a1a'
+    } else if (stall_count <= 28) {
+        return '#f60a1a'
+    } else if (stall_count <= 32) {
+        return '#f6005a'
+    } else if (stall_count <= 36) {
+        return '#f6008a'
+    } else { return '#800080' } 
+}
