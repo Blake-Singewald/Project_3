@@ -21,7 +21,7 @@ var baseMaps = {
     "Topographic Map": topo 
 };  
 // Load National Parks data from CSV
-d3.csv('..Project_3/Archive/national_parks.csv').then(function(data) {
+d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
   data.forEach(function(park) {
     var marker = L.marker([park.lat, park.lng]);
     marker.bindPopup(`<b>${park.name}</b><br>${park.location}`);
