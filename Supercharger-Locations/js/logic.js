@@ -67,7 +67,7 @@ d3.json(url).then(function(response) {
 let myMap = L.map("map", {     
     center: [37.09, -95.71],     
     zoom: 5,     
-    layers: [street] // Set the default base layer 
+    layers: [street, gpsLayer, NationalParksLayer]// Set the default base layer 
 });  
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
