@@ -67,7 +67,32 @@ let myMap = L.map("map", {
     center: [37.09, -95.71],     
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
-});  
+}); 
+
+// Add a circle marker to map
+let userLocation;
+const searchRadius = 50000;
+const clickedPoint = L.layerGroup().addTo(myMap);
+
+myMap.on('click', function(e) {
+  userLocation = e.latlng;
+
+  clickedPoint.clearLayers();
+  L.circle(e.latlng, {
+    color: "#000",
+    stroke: true,
+    weight:2,
+    opacity:0.5,
+    fillColor: "blue",
+    fillOpacity: 0.25,
+    radius: searchRadius
+  }).addTo(clickedPoint);
+
+  myMap.flyTo(userLocation, 9);
+  
+})
+
+
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
