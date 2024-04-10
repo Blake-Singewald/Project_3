@@ -80,9 +80,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
 // Function to calculate distance between two points
-function calculateDistance(point1, point2) {
-    return point1.distanceTo(point2) / 1000; // Distance in kilometers
-}
+// function calculateDistance(point1, point2) {
+//    return point1.distanceTo(point2) / 1000; // Distance in kilometers
+// }
 
 // Function to calculate distance between two points in miles
 function calculateDistance(point1, point2) {
