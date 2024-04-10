@@ -2,49 +2,51 @@
 var startPoint = null;
 var endPoint = null;
 
-// Your JavaScript code goes here
-// Load the CSV file using Papa Parse
-Papa.parse("/Project_3/Archive/national_parks.csv", {
-    download: true,
-    header: true,
-    complete: function (results) {
-        // Parse complete, log the data to the console
-        //console.log("Parsed CSV data:", results.data);
-
-        // Iterate through the data and log park information
-        var jsonData = {
-            "name,location,lat,long": results.data.map(function (row) {
-                return row["name,location,lat,long"]
-            })
+// Check if the map is already initialized
+if (!L.DomUtil.get('map')) {
+    // Load the CSV file using Papa Parse
+    Papa.parse("/Project_3/Archive/national_parks.csv", {
+        download: true,
+        header: true,
+        complete: function (results) {
+            // Parse complete, log the data to the console
+            //console.log("Parsed CSV data:", results.data);
+            
+            // Extract data from CSV and create markers on the map
+            var jsonData = {
+                "name,location,lat,long": results.data.map(function (row) {
+                    return row["name,location,lat,long"];
+                })
+            };
+            
+            // Initialize the map and add markers
+            var myMap = L.map('map', {
+                maxZoom: 18
+            }).setView([37.0902, -95.7129], 4);
+            
+            var markers = L.markerClusterGroup();
+            
+            // Extract data from JSON and display markers on the map
+            jsonData["name,location,lat,long"].forEach(function (item) {
+                var parts = item.split(",");
+                var parkName = parts[0];
+                var latitude = parseFloat(parts[2].trim());
+                var longitude = parseFloat(parts[3].trim());
+                
+                // Create a marker and add it to the marker cluster group
+                var marker = L.marker([latitude, longitude])
+                    .bindPopup(`<b>${parkName}</b><br>Latitude: ${latitude}, Longitude: ${longitude}`);
+                markers.addLayer(marker);
+            });
+            
+            // Add the marker cluster group to the map
+            myMap.addLayer(markers);
         }
-        //console.log(jsonData)
-        createmap(jsonData)
-    }
-});
-
-
-
-function createmap(jsonData){
-// Initialize the map
-var myMap = L.map('map', {
-    maxZoom: 18
-}).setView([37.0902, -95.7129], 4);
-
-var markers = L.markerClusterGroup();
-
-// Extract data from JSON and display markers on the map
-jsonData["name,location,lat,long"].forEach(function (item) {
-    var parts = item.split(",");
-    //console.log(parts)
-    var parkName = parts[0];
-    var latitude = parseFloat(parts[2].trim());
-    var longitude = parseFloat(parts[3].trim());
-
-    // Create a marker and add it to the map
-    var marker = L.marker([latitude, longitude])
-        .bindPopup(`<b>${parkName}</b><br>Latitude: ${latitude}, Longitude: ${longitude},`);
-    markers.addLayer(marker);
-});
+    });
+} else {
+    // If the map is already initialized, you can handle it here
+    console.log('Map is already initialized');
+}
 
 // var parks = [
 //     { name: 'Grand Canyon National Park', location: 'Arizona', coordinates: [36.2679, -112.3535], image: 'grandcanyon.jpg' },
