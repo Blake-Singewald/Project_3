@@ -45,9 +45,9 @@ d3.json(url).then(function(response) {
                 opacity: 0.5
             });
             // Bind a popup to the circleMarker
-            circleMarker.bindTooltip(`<strong>Address: </strong>${site.address.street}
+            circleMarker.bindTooltip(`<strong>Status: </strong>${site.status}<br><strong>Address: </strong>${site.address.street}
                 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${site.name}<strong>, </strong>${site.address.zip}<br><strong>Stall Count: </strong>${site.stallCount}`);
+                ${site.address.city}<strong>, </strong>${site.address.state}<strong>, </strong>${site.address.zip}<br><strong>Stall Count: </strong>${site.stallCount}`);
             // Add the circleMarker to the gpsMarkers array
             gpsMarkers.push(circleMarker);     
         });
