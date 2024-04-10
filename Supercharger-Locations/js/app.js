@@ -4,7 +4,7 @@ var endPoint = null;
 
 // Your JavaScript code goes here
 // Load the CSV file using Papa Parse
-Papa.parse("national_parks.csv", {
+Papa.parse("/Project_3/Archive/national_parks.csv", {
     download: true,
     header: true,
     complete: function (results) {
