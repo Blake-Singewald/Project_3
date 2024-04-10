@@ -18,14 +18,14 @@ var baseMaps = {
     "Topographic Map": topo 
 };  
 // Load National Parks data from CSV
-// d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
-//  data.forEach(function(park) {
-//    var marker = L.marker([park.lat, park.lng]);
-//    marker.bindPopup(`<b>${park.name}</b><br>${park.location}`);
-//    npMarkers.push(marker); // Add the marker to npMarkers array
-//    NationalParksLayer.addLayer(marker); // Add the marker to NationalParksLayer
-//  });
-//});
+d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
+data.forEach(function(park) {
+    var marker = L.marker([park.lat, park.lng]);
+    marker.bindPopup(`<b>${park.name}</b><br>${park.location}`);
+    npMarkers.push(marker); // Add the marker to npMarkers array
+    NationalParksLayer.addLayer(marker); // Add the marker to NationalParksLayer
+  });
+});
 // Fetch data from the API using d3.json 
 d3.json(url).then(function(response) {     
    // console.log(response); // Check the response data
@@ -56,8 +56,8 @@ d3.json(url).then(function(response) {
             gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
         });
         var overlayMaps = {     
-            "SuperChargers": gpsLayer
-       //     "National Parks": NationalParksLayer
+            "SuperChargers": gpsLayer,
+            "National Parks": NationalParksLayer
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
     } else {
@@ -68,7 +68,7 @@ d3.json(url).then(function(response) {
 let myMap = L.map("map", {     
     center: [37.09, -95.71],     
     zoom: 5,     
-    layers: [street, gpsLayer] // Set the default base layers 
+    layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 });  
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
