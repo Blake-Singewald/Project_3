@@ -111,3 +111,31 @@ function scColor(stall_count) {
         return '#f6008a'
     } else { return '#800080' } 
 }
+// Function to calculate distance between two points
+            function calculateDistance(point1, point2) {
+                var distanceKm = point1.distanceTo(point2) / 1000; // Distance in kilometers
+                var distanceMiles = distanceKm * 0.621371; // Convert kilometers to miles
+                return distanceMiles;
+            }
+
+            // Function to handle click events on the map
+            function onMapClick(e) {
+                if (!startPoint) {
+                    startPoint = e.latlng;
+                    alert("Start point set!");
+                } else if (!endPoint) {
+                    endPoint = e.latlng;
+                    alert("End point set!");
+
+                    // Calculate distance between two points
+                    var distance = calculateDistance(startPoint, endPoint);
+                    alert("Distance between points: " + distance.toFixed(2) + " miles");
+
+                    // Reset points for the next calculation
+                    startPoint = null;
+                    endPoint = null;
+                }
+            }
+
+            // Add click event listener to the map
+            myMap.on('click', onMapClick);
