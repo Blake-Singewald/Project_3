@@ -80,6 +80,9 @@ let myMap = L.map("map", {
     layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
 }); 
 
+myMap.on('click', function(e) {
+    clearUserSelections(); // Clear previous selections
+    userLocation = e.latlng; // Define userLocation with the clicked point coordinates
 clickedPoint.on('click', function(e) {
     clearUserSelections();
     userLocation = e.latlng;
@@ -95,6 +98,8 @@ clickedPoint.on('click', function(e) {
         radius: searchRadius
     }).addTo(clickedPoint);
 
+    let selectedPts = [];
+    
     gpsMarkers.forEach(marker => {
         const selectedSiteCoords = marker.getLatLng();
         const distance = userLocation.distanceTo(selectedSiteCoords);
