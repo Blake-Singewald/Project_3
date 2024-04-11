@@ -95,7 +95,6 @@ myMap.on('click', function(e) {
         userLocation = e.latlng; // Update userLocation with the clicked point coordinates
         clickedPoint.clearLayers(); // Clear the clickedPoint layer group
     });
-});
     L.circle(e.latlng, {
         color: "#000",
         stroke: true,
