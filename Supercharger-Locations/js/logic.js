@@ -105,13 +105,9 @@ myMap.on('click', function(e) {
             }
         }
     });
-
-    if (clickCount === 2) {
-        removeUserSiteInfo();
-        clickCount = 0; // Reset click count for future clicks
-    }
 });
-function updateSiteInfo(siteName, status, stallCount) {
+
+function updateSiteInfo(status, siteName, stallCount) {
     const userSiteInfo = L.control({ position: 'bottomleft' });
     userSiteInfo.onAdd = function() {
         var div = L.DomUtil.create('div', 'site info');
