@@ -67,7 +67,7 @@ d3.json(url).then(function(response) {
         var overlayMaps = {     
             "SuperChargers": gpsLayer,
             "National Parks": NationalParksLayer.
-            "Within 31 Miles of Supercharger: clickedPoint
+            "Within 31 Miles of Supercharger": clickedPoint
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
     } else {
