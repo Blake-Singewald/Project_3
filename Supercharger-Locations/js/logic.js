@@ -150,7 +150,7 @@ myMap.on('click', function(e) {
 });
 
     userSiteInfo.addTo(myMap);
-    }
+    
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
