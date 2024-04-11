@@ -94,13 +94,11 @@ myMap.on('click', function(e) {
         radius: searchRadius
     }).addTo(clickedPoint);
 
-    let selectedPts = [];
     gpsMarkers.forEach(marker => {
         const selectedSiteCoords = marker.getLatLng();
         const distance = userLocation.distanceTo(selectedSiteCoords);
 
         if (distance <= searchRadius) {
-            selectedPts.push(selectedSiteCoords);
             const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
             if (selectedSites) {
                 updateSiteInfo(selectedSites.name, selectedSites.stallCount);
@@ -110,22 +108,16 @@ myMap.on('click', function(e) {
 });
 
 function updateSiteInfo(siteName, stallCount) {
-    if (userSiteInfo) {
-        userSiteInfo.getContainer().innerHTML = "<h3>Charger Within Range</h3>" +
+    const userSiteInfo = L.control({ position: 'bottomleft' });
+    userSiteInfo.onAdd = function() {
+        var div = L.DomUtil.create('div', 'site info');
+        div.style.backgroundColor = 'white';
+        div.innerHTML = "<h3>Charger Within Range</h3>" +
             "<p>Name: " + siteName + "</p>" +
             "<p>Available Stalls: " + stallCount + "</p>";
-    } else {
-        userSiteInfo = L.control({ position: 'bottomleft' });
-        userSiteInfo.onAdd = function() {
-            var div = L.DomUtil.create('div', 'site info');
-            div.style.backgroundColor = 'white'; // Add white background color
-            div.innerHTML = "<h3>Charger Within Range</h3>" +
-                "<p>Name: " + siteName + "</p>" +
-                "<p>Available Stalls: " + stallCount + "</p>";
-            return div;
-        };
-        userSiteInfo.addTo(myMap);
-    }
+        return div;
+    };
+    userSiteInfo.addTo(myMap);
 }
 function clearUserSelections() {
     // Clear any previous selections or user interactions
