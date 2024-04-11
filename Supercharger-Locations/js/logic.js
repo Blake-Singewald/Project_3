@@ -148,33 +148,7 @@ myMap.on('click', function(e) {
         radius: searchRadius
     }).addTo(clickedPoint);
 });
-    gpsMarkers.forEach(marker => {
-        const selectedSiteCoords = marker.getLatLng();
-        const distance = userLocation.distanceTo(selectedSiteCoords);
 
-        if (distance <= searchRadius) {
-            const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
-            if (selectedSites) {
-                updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
-            }
-        }
-    });
-    // Remove the userSiteInfo control after the third click
-    if (clickedPoint.getLayers().length >= 3) {
-        myMap.removeControl(userSiteInfo);
-    }
-
-    function updateSiteInfo(status, siteName, stallCount) {
-        const userSiteInfo = L.control({ position: 'bottomleft' });
-        userSiteInfo.onAdd = function() {
-            var div = L.DomUtil.create('div', 'site info');
-            div.style.backgroundColor = 'white';
-            div.innerHTML = "<strong>Charger Within Range</strong><br>" +
-                "Status: " + status + "<br>" +
-                "Name: " + siteName + "<br>" +
-                "Available Stalls: " + stallCount + "<br>";
-            return div;
-        };
     userSiteInfo.addTo(myMap);
     }
     var legend = L.control({position: 'bottomright'});
