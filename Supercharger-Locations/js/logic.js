@@ -75,20 +75,6 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
-// Example of batching DOM operations
-setTimeout(function() {
-    // Perform DOM operations within a single batch
-    let container = document.getElementById('container');
-    let fragment = document.createDocumentFragment();
-
-    for (let i = 0; i < 10; i++) {
-        let div = document.createElement('div');
-        div.textContent = 'Element ' + i;
-        fragment.appendChild(div);
-    }
-
-    container.appendChild(fragment);
-}, 500); // Adjust timeout duration as needed
 
 let userSiteInfo; // Declare userSiteInfo outside the click event
 let clickedPoint = L.layerGroup(); // Define clickedPoint as a layer group
@@ -126,9 +112,6 @@ myMap.on('click', function(e) {
         }
     });
 });
-setTimeout(function() {
-    // Code inside the setTimeout function
-}, 500); // Adjust timeout duration as needed
 
 function updateSiteInfo(siteName, stallCount) {
     if (userSiteInfo) {
@@ -198,42 +181,4 @@ function scColor(stall_count) {
     } else if (stall_count <= 36) {
         return '#f6008a'
     } else { return '#800080' } 
-}
-
-// Function to calculate distance between two points
-function calculateDistance(point1, point2) {
-    var distanceKm = point1.distanceTo(point2) / 1000; // Distance in kilometers
-    var distanceMiles = distanceKm * 0.621371; // Convert kilometers to miles
-    return distanceMiles;
-}
-
-// Function to handle click events on the map
-function onMapClick(e) {
-    if (!startPoint) {
-        startPoint = e.latlng;
-        
-        // Add a bright yellow marker at the start point
-        var startMarker = L.marker(startPoint, {
-            icon: L.icon({
-                iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png', // You can use a custom icon or change the color here
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            })
-        }).addTo(myMap);
-
-        alert("Start point set!");
-    } else if (!endPoint) {
-        endPoint = e.latlng;
-        alert("End point set!");
-
-        // Calculate distance between two points
-        var distance = calculateDistance(startPoint, endPoint);
-        alert("Distance between points: " + distance.toFixed(2) + " miles");
-
-        // Reset points for the next calculation
-        startPoint = null;
-        endPoint = null;
-    }
 }
