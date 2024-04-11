@@ -105,16 +105,21 @@ myMap.on('click', function(e) {
             }
         }
     });
-});
 
-function updateSiteInfo(siteName, stallCount) {
+    if (clickCount === 2) {
+        removeUserSiteInfo();
+        clickCount = 0; // Reset click count for future clicks
+    }
+});
+function updateSiteInfo(siteName, status, stallCount) {
     const userSiteInfo = L.control({ position: 'bottomleft' });
     userSiteInfo.onAdd = function() {
         var div = L.DomUtil.create('div', 'site info');
         div.style.backgroundColor = 'white';
-        div.innerHTML = "<h3>Charger Within Range</h3>" +
-            "<p>Name: " + siteName + "</p>" +
-            "<p>Available Stalls: " + stallCount + "</p>";
+        div.innerHTML = "<strong>Charger Within Range</strong><br>" +
+            "Status: " + status + "<br>" +
+            "Name: " + siteName + "<br>" +
+            "Available Stalls: " + stallCount + "<br>";
         return div;
     };
     userSiteInfo.addTo(myMap);
