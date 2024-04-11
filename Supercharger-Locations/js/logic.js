@@ -81,7 +81,13 @@ let myMap = L.map("map", {
 }); 
 
 myMap.on('click', function(e) {
-    clearUserSelections(); // Clear previous selections
+    clearUserSelections(){
+    myMap.eachLayer(function (layer) {
+        if (layer instanceof L.Marker) {
+            myMap.removeLayer(layer);
+        }
+    });
+}
     userLocation = e.latlng; // Define userLocation with the clicked point coordinates
 clickedPoint.on('click', function(e) {
     clearUserSelections();
