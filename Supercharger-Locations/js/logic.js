@@ -81,11 +81,11 @@ let clickedPoint = L.layerGroup();
 let userLocation;
 let searchRadius = 1000;
 
-function handleMapClick(e) {
+myMap.on('click', function(e) {
     clearUserSelections();
     userLocation = e.latlng;
     clickedPoint.clearLayers();
-    
+
     L.circle(e.latlng, {
         color: "#000",
         stroke: true,
@@ -109,7 +109,7 @@ function handleMapClick(e) {
             }
         }
     });
-}
+});
 
 function updateSiteInfo(siteName, stallCount) {
     if (!userSiteInfo) {
@@ -134,7 +134,7 @@ function clearUserSelections() {
     clickedPoint.clearLayers();
     if (userSiteInfo) {
         myMap.removeControl(userSiteInfo);
-        userSiteInfo = null; // Reset userSiteInfo
+        userSiteInfo = null;
     }
 }
     var legend = L.control({position: 'bottomright'});
