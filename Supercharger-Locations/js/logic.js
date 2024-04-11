@@ -105,12 +105,12 @@ function updateSiteInfo(status, siteName, stallCount) {
 
     // Add a click event listener to the map to handle user interactions
     myMap.on('click', function(e) {
-        clearUserSelections(); // Clear all markers from the map
+        //clearUserSelections(); // Clear all markers from the map
         userLocation = e.latlng; // Define userLocation with the clicked point coordinates
 
         // Click event listener for the clickedPoint layer group
         clickedPoint.on('click', function(e) {
-            clearUserSelections(); // Clear all markers from the map
+            //clearUserSelections(); // Clear all markers from the map
             userLocation = e.latlng; // Update userLocation with the clicked point coordinates
             clickedPoint.clearLayers(); // Clear the clickedPoint layer group
 
