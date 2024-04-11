@@ -117,6 +117,7 @@ function updateSiteInfo(status, siteName, stallCount) {
             clickCount++;
 
             // Update site info if within range
+            let selectedPts = [];
             gpsMarkers.forEach(marker => {
                 const selectedSiteCoords = marker.getLatLng();
                 const distance = userLocation.distanceTo(selectedSiteCoords);
@@ -125,7 +126,7 @@ function updateSiteInfo(status, siteName, stallCount) {
                     if (selectedSites) {
                         updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
                     }
-                }
+                } 
             });
 
             // Remove the userSiteInfo control after the third click
