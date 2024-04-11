@@ -119,7 +119,6 @@ function scColor(stall_count) {
         return '#f6008a'
     } else { return '#800080' } 
 }
-
 // Function to calculate distance between two points
 function calculateDistance(point1, point2) {
     var distanceKm = point1.distanceTo(point2) / 1000; // Distance in kilometers
