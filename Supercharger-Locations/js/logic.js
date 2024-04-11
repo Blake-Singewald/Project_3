@@ -224,3 +224,5 @@ myMap.on('click', onMapClick);
 function resetClickEvent() {
     myMap.off('click', onMapClick);
 }
+// Call the resetClickEvent function whenever you need to reset the click event
+resetClickEvent();
