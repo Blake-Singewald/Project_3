@@ -87,7 +87,7 @@ clickedPoint.on('click', function(e) {
     clearUserSelections();
     userLocation = e.latlng;
     clickedPoint.clearLayers();
-
+});
     L.circle(e.latlng, {
         color: "#000",
         stroke: true,
