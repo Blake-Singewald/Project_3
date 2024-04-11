@@ -78,11 +78,11 @@ let myMap = L.map("map", {
 
 let userSiteInfo; // Declare userSiteInfo outside the click event
 let clickedPoint = L.layerGroup(); // Define clickedPoint as a layer group
+let userLocation;
 
 myMap.on('click', function(e) {
     clearUserSelections(); // Clear previous selections
-
-    userLocation = e.latlng;
+    userLocation = e.latlng; // Define userLocation with the clicked point coordinates
     clickedPoint.clearLayers();
     L.circle(e.latlng, {
         color: "#000",
