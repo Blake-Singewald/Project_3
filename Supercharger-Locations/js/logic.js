@@ -101,7 +101,7 @@ myMap.on('click', function(e) {
         if (distance <= searchRadius) {
             const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
             if (selectedSites) {
-                updateSiteInfo(selectedSites.name, selectedSites.stallCount);
+                updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
             }
         }
     });
@@ -119,15 +119,6 @@ function updateSiteInfo(status, siteName, stallCount) {
         return div;
     };
     userSiteInfo.addTo(myMap);
-}
-function clearUserSelections() {
-    // Clear any previous selections or user interactions
-    clickedPoint.clearLayers(); // Clear the clickedPoint layer group
-
-    if (userSiteInfo) {
-        myMap.removeControl(userSiteInfo); // Remove the userSiteInfo control if it exists
-        userSiteInfo = null; // Reset the userSiteInfo variable
-    }
 }
 
     var legend = L.control({position: 'bottomright'});
@@ -213,3 +204,14 @@ function onMapClick(e) {
 }
 // Add click event listener to the map
 myMap.on('click', onMapClick);
+
+function clearUserSelections() {
+    // Clear any previous selections or user interactions
+    clickedPoint.clearLayers(); // Clear the clickedPoint layer group
+
+    if (userSiteInfo) {
+        myMap.removeControl(userSiteInfo); // Remove the userSiteInfo control if it exists
+        userSiteInfo = null; // Reset the userSiteInfo variable
+    }
+}
+
