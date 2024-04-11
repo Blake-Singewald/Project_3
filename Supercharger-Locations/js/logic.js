@@ -134,8 +134,6 @@ function updateSiteInfo(status, siteName, stallCount) {
                 clickCount = 0; // Reset click count for future interactions
             }
 
-            userSiteInfo.addTo(myMap);
-
             // Add a circle to the clickedPoint layer group
             L.circle(e.latlng, {
                 color: "#000",
@@ -146,6 +144,7 @@ function updateSiteInfo(status, siteName, stallCount) {
                 fillOpacity: 0.25,
                 radius: searchRadius
             }).addTo(clickedPoint);
+            userSiteInfo.addTo(myMap);
         });
     });
 }
