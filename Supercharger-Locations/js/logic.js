@@ -8,6 +8,10 @@ var npMarkers = []; // Define gpsMarkers array
 let chargingSites = []; // Variable to store reponse data for later click event
 var startPoint = null;
 var endPoint = null;
+let userSiteInfo = null;
+let clickedPoint = L.layerGroup();
+let userLocation;
+let searchRadius = 1000;
 // Define base layers 
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {     
     attribution: '© OpenStreetMap contributors' 
@@ -62,7 +66,8 @@ d3.json(url).then(function(response) {
         });
         var overlayMaps = {     
             "SuperChargers": gpsLayer,
-            "National Parks": NationalParksLayer
+            "National Parks": NationalParksLayer.
+            "Within 31 Miles of Supercharger: clickedPoint
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
     } else {
@@ -73,13 +78,10 @@ d3.json(url).then(function(response) {
 let myMap = L.map("map", {     
     center: [37.09, -95.71],     
     zoom: 5,     
-    layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
+    layers: [street, gpsLayer, NationalParksLayer, ClickedPoint] // Set the default base layers 
 }); 
 
-let userSiteInfo = null;
-let clickedPoint = L.layerGroup();
-let userLocation;
-let searchRadius = 1000;
+
 
 myMap.on('click', function(e) {
     clearUserSelections();
