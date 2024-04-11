@@ -59,28 +59,7 @@ d3.json(url).then(function(response) {
             // Add the circleMarker to the gpsMarkers array
             gpsMarkers.push(circleMarker);     
         });
-
-
-        gpsMarkers.forEach(function(marker) {
-            gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
-        });
-        var overlayMaps = {     
-            "SuperChargers": gpsLayer,
-            "National Parks": NationalParksLayer.
-            "Within 31 Miles of Supercharger": clickedPoint
-        }; 
-        L.control.layers(baseMaps, overlayMaps).addTo(myMap);
-    } else {
-        console.log("Response data is not in the expected format or is empty.");
-    }
-});  
-// Create the map and add Layer Control 
-let myMap = L.map("map", {     
-    center: [37.09, -95.71],     
-    zoom: 5,     
-    layers: [street, gpsLayer, NationalParksLayer, ClickedPoint] // Set the default base layers 
-}); 
-
+        
 
 
 myMap.on('click', function(e) {
@@ -140,6 +119,27 @@ function clearUserSelections() {
         userSiteInfo = null; // Reset the userSiteInfo variable
     }
 }
+
+        gpsMarkers.forEach(function(marker) {
+            gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
+        });
+        var overlayMaps = {     
+            "SuperChargers": gpsLayer,
+            "National Parks": NationalParksLayer.
+            "Within 31 Miles of Supercharger": clickedPoint
+        }; 
+        L.control.layers(baseMaps, overlayMaps).addTo(myMap);
+    } else {
+        console.log("Response data is not in the expected format or is empty.");
+    }
+});  
+// Create the map and add Layer Control 
+let myMap = L.map("map", {     
+    center: [37.09, -95.71],     
+    zoom: 5,     
+    layers: [street, gpsLayer, NationalParksLayer, ClickedPoint] // Set the default base layers 
+}); 
+
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
