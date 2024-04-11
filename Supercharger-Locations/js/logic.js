@@ -76,7 +76,7 @@ let myMap = L.map("map", {
 
 // Add a circle marker to map
 let userLocation;
-const searchRadius = 50000; // distance in meters ~50mi
+const searchRadius = 80467; // distance in meters ~50mi
 const clickedPoint = L.layerGroup().addTo(myMap);
 
 myMap.on('click', function(e) {
