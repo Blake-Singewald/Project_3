@@ -129,16 +129,7 @@ function updateSiteInfo(siteName, stallCount) {
         userSiteInfo.addTo(myMap);
     }
 }
-// Add click event listener to the map
-// myMap.on('click', onMapClick);
 
-function clearUserSelections() {
-    clickedPoint.clearLayers();
-    if (userSiteInfo) {
-        myMap.removeControl(userSiteInfo);
-        userSiteInfo = null;
-    }
-}
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
