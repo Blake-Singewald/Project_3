@@ -122,15 +122,6 @@ myMap.on('click', function(e) {
         }
     });
 });
-
-function clearUserSelections() {
-    clickedPoint.clearLayers();
-    if (userSiteInfo) {
-        myMap.removeControl(userSiteInfo);
-    }
-}
-
-
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
@@ -213,3 +204,9 @@ function onMapClick(e) {
     }
 }
 
+function clearUserSelections() {
+    clickedPoint.clearLayers();
+    if (userSiteInfo) {
+        myMap.removeControl(userSiteInfo);
+    }
+}
