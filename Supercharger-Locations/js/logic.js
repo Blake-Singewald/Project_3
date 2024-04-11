@@ -75,7 +75,9 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
+
 let userSiteInfo; // Declare userSiteInfo outside the click event
+let clickedPoint = L.layerGroup(); // Define clickedPoint as a layer group
 
 myMap.on('click', function(e) {
     clearUserSelections(); // Clear previous selections
