@@ -209,6 +209,9 @@ function onMapClick(e) {
         // Reset points for the next calculation
         startPoint = null;
         endPoint = null;
+        }
     }
-}
-
+    // Add click event listener to the map
+    myMap.on('click', onMapClick);
+    }
+});
