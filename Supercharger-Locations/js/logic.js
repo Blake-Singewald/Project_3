@@ -80,30 +80,64 @@ let myMap = L.map("map", {
     layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
 }); 
 let clickCount = 0; // Initialize click counter
-function clearUserSelections(){
+
+// Define the clearUserSelections function to remove all markers from the map
+function clearUserSelections() {
     myMap.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
             myMap.removeLayer(layer);
         }
     });
 }
+
+// Function to update site information in the userSiteInfo control
+function updateSiteInfo(status, siteName, stallCount) {
+    const userSiteInfo = L.control({ position: 'bottomleft' });
+    userSiteInfo.onAdd = function() {
+        var div = L.DomUtil.create('div', 'site info');
+        div.style.backgroundColor = 'white';
+        div.innerHTML = "<strong>Charger Within Range</strong><br>" +
+            "Status: " + status + "<br>" +
+            "Name: " + siteName + "<br>" +
+            "Available Stalls: " + stallCount + "<br>";
+        return div;
+    };
+    userSiteInfo.addTo(myMap);
+}
+
+// Add a click event listener to the map to handle user interactions
 myMap.on('click', function(e) {
     userLocation = e.latlng; // Define userLocation with the clicked point coordinates
+
     // Click event listener for the clickedPoint layer group
     clickedPoint.on('click', function(e) {
         clearUserSelections(); // Clear all markers from the map
         userLocation = e.latlng; // Update userLocation with the clicked point coordinates
         clickedPoint.clearLayers(); // Clear the clickedPoint layer group
-        
+
         // Increment click count
         clickCount++;
 
-        // Remove userSiteInfo control after 3 clicks
+        // Update site info if within range
+        gpsMarkers.forEach(marker => {
+            const selectedSiteCoords = marker.getLatLng();
+            const distance = userLocation.distanceTo(selectedSiteCoords);
+            if (distance <= searchRadius) {
+                const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
+                if (selectedSites) {
+                    updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
+                }
+            }
+        });
+
+        // Remove the userSiteInfo control after the third click
         if (clickCount >= 3) {
             myMap.removeControl(userSiteInfo);
             clickCount = 0; // Reset click count for future interactions
         }
     });
+
+    // Add a circle to the clickedPoint layer group
     L.circle(e.latlng, {
         color: "#000",
         stroke: true,
@@ -113,9 +147,7 @@ myMap.on('click', function(e) {
         fillOpacity: 0.25,
         radius: searchRadius
     }).addTo(clickedPoint);
-
-    let selectedPts = [];
-    
+});
     gpsMarkers.forEach(marker => {
         const selectedSiteCoords = marker.getLatLng();
         const distance = userLocation.distanceTo(selectedSiteCoords);
@@ -144,8 +176,7 @@ myMap.on('click', function(e) {
             return div;
         };
     userSiteInfo.addTo(myMap);
-}
-});
+    }
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
