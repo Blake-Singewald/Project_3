@@ -89,7 +89,18 @@ function clearUserSelections() {
         }
     });
 }
-
+        // Function to update site information in the userSiteInfo control
+        function updateSiteInfo(status, siteName, stallCount) {
+            const userSiteInfo = L.control({ position: 'bottomleft' });
+            userSiteInfo.onAdd = function() {
+            var div = L.DomUtil.create('div', 'site info');
+            div.style.backgroundColor = 'white';
+            div.innerHTML = "<strong>Charger Within Range</strong><br>" +
+                "Status: " + status + "<br>" +
+                "Name: " + siteName + "<br>" +
+                "Available Stalls: " + stallCount + "<br>";
+            return div;
+        };
 // Add a click event listener to the map to handle user interactions
 myMap.on('click', function(e) {
     userLocation = e.latlng; // Define userLocation with the clicked point coordinates
@@ -114,18 +125,6 @@ myMap.on('click', function(e) {
                 }
             }
         });
-        // Function to update site information in the userSiteInfo control
-        function updateSiteInfo(status, siteName, stallCount) {
-            const userSiteInfo = L.control({ position: 'bottomleft' });
-            userSiteInfo.onAdd = function() {
-            var div = L.DomUtil.create('div', 'site info');
-            div.style.backgroundColor = 'white';
-            div.innerHTML = "<strong>Charger Within Range</strong><br>" +
-                "Status: " + status + "<br>" +
-                "Name: " + siteName + "<br>" +
-                "Available Stalls: " + stallCount + "<br>";
-            return div;
-        };
         userSiteInfo.addTo(myMap);
         }
         // Remove the userSiteInfo control after the third click
