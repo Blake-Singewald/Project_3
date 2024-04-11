@@ -89,62 +89,66 @@ function clearUserSelections() {
         }
     });
 }
-        // Function to update site information in the userSiteInfo control
-        function updateSiteInfo(status, siteName, stallCount) {
-            const userSiteInfo = L.control({ position: 'bottomleft' });
-            userSiteInfo.onAdd = function() {
-            var div = L.DomUtil.create('div', 'site info');
-            div.style.backgroundColor = 'white';
-            div.innerHTML = "<strong>Charger Within Range</strong><br>" +
-                "Status: " + status + "<br>" +
-                "Name: " + siteName + "<br>" +
-                "Available Stalls: " + stallCount + "<br>";
-            return div;
-        };
-// Add a click event listener to the map to handle user interactions
-myMap.on('click', function(e) {
-    userLocation = e.latlng; // Define userLocation with the clicked point coordinates
 
-    // Click event listener for the clickedPoint layer group
-    clickedPoint.on('click', function(e) {
-        clearUserSelections(); // Clear all markers from the map
-        userLocation = e.latlng; // Update userLocation with the clicked point coordinates
-        clickedPoint.clearLayers(); // Clear the clickedPoint layer group
+// Function to update site information in the userSiteInfo control
+function updateSiteInfo(status, siteName, stallCount) {
+    const userSiteInfo = L.control({ position: 'bottomleft' });
+    userSiteInfo.onAdd = function() {
+        var div = L.DomUtil.create('div', 'site info');
+        div.style.backgroundColor = 'white';
+        div.innerHTML = "<strong>Charger Within Range</strong><br>" +
+            "Status: " + status + "<br>" +
+            "Name: " + siteName + "<br>" +
+            "Available Stalls: " + stallCount + "<br>";
+        return div;
+    };
 
-        // Increment click count
-        clickCount++;
+    // Add a click event listener to the map to handle user interactions
+    myMap.on('click', function(e) {
+        userLocation = e.latlng; // Define userLocation with the clicked point coordinates
 
-        // Update site info if within range
-        gpsMarkers.forEach(marker => {
-            const selectedSiteCoords = marker.getLatLng();
-            const distance = userLocation.distanceTo(selectedSiteCoords);
-            if (distance <= searchRadius) {
-                const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
-                if (selectedSites) {
-                    updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
+        // Click event listener for the clickedPoint layer group
+        clickedPoint.on('click', function(e) {
+            clearUserSelections(); // Clear all markers from the map
+            userLocation = e.latlng; // Update userLocation with the clicked point coordinates
+            clickedPoint.clearLayers(); // Clear the clickedPoint layer group
+
+            // Increment click count
+            clickCount++;
+
+            // Update site info if within range
+            gpsMarkers.forEach(marker => {
+                const selectedSiteCoords = marker.getLatLng();
+                const distance = userLocation.distanceTo(selectedSiteCoords);
+                if (distance <= searchRadius) {
+                    const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
+                    if (selectedSites) {
+                        updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
+                    }
                 }
-            }
+            });
 
             // Remove the userSiteInfo control after the third click
             if (clickCount >= 3) {
                 myMap.removeControl(userSiteInfo);
                 clickCount = 0; // Reset click count for future interactions
             }
+
+            userSiteInfo.addTo(myMap);
+
+            // Add a circle to the clickedPoint layer group
+            L.circle(e.latlng, {
+                color: "#000",
+                stroke: true,
+                weight: 2,
+                opacity: 0.5,
+                fillColor: "blue",
+                fillOpacity: 0.25,
+                radius: searchRadius
+            }).addTo(clickedPoint);
+        });
     });
-    userSiteInfo.addTo(myMap);
-
-    // Add a circle to the clickedPoint layer group
-    L.circle(e.latlng, {
-        color: "#000",
-        stroke: true,
-        weight: 2,
-        opacity: 0.5,
-        fillColor: "blue",
-        fillOpacity: 0.25,
-        radius: searchRadius
-    }).addTo(clickedPoint);
-});
-
+}
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
