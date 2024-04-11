@@ -8,10 +8,6 @@ var npMarkers = []; // Define gpsMarkers array
 let chargingSites = []; // Variable to store reponse data for later click event
 var startPoint = null;
 var endPoint = null;
-let userSiteInfo = null;
-let clickedPoint = L.layerGroup();
-let userLocation;
-let searchRadius = 50000;
 // Define base layers 
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {     
     attribution: '© OpenStreetMap contributors' 
@@ -53,20 +49,17 @@ d3.json(url).then(function(response) {
                 opacity: 0.5
             });
             // Bind a popup to the circleMarker
-            circleMarker.bindTooltip(`<strong>Status: </strong>${site.status}<br><strong>Address: </strong>${site.address.street}
-                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${site.address.city}<strong>, </strong>${site.address.state}<strong>, </strong>${site.address.zip}<br><strong>Stall Count: </strong>${site.stallCount}`);
+            circleMarker.bindTooltip(`<strong>Place: </strong> ${site.name}<br><strong>Stall Count: </strong>${site.stallCount}`);
             // Add the circleMarker to the gpsMarkers array
             gpsMarkers.push(circleMarker);     
         });
-    
+
         gpsMarkers.forEach(function(marker) {
             gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
         });
         var overlayMaps = {     
             "SuperChargers": gpsLayer,
-            "National Parks": NationalParksLayer,
-            "Within 31 Miles of Supercharger": clickedPoint
+            "National Parks": NationalParksLayer
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
     } else {
@@ -77,79 +70,63 @@ d3.json(url).then(function(response) {
 let myMap = L.map("map", {     
     center: [37.09, -95.71],     
     zoom: 5,     
-    layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
+    layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
-let clickCount = 0; // Initialize click counter
+   
 
-// Define the clearUserSelections function to remove all markers from the map
-function clearUserSelections() {
-    myMap.eachLayer(function (layer) {
-        if (layer instanceof L.Marker) {
-            myMap.removeLayer(layer);
-        }
-    });
-}
+// Add a circle marker to map
+let userLocation;
+const searchRadius = 80467; // distance in meters ~50mi
+const clickedPoint = L.layerGroup().addTo(myMap);
 
-// Function to update site information in the userSiteInfo control
-function updateSiteInfo(status, siteName, stallCount) {
-    const userSiteInfo = L.control({ position: 'bottomleft' });
-    userSiteInfo.onAdd = function() {
-        var div = L.DomUtil.create('div', 'site info');
-        div.style.backgroundColor = 'white';
-        div.innerHTML = "<strong>Charger Within Range</strong><br>" +
-            "Status: " + status + "<br>" +
-            "Name: " + siteName + "<br>" +
-            "Available Stalls: " + stallCount + "<br>";
-        return div;
-    };
+myMap.on('click', function(e) {
+  userLocation = e.latlng;
+  
+  clickedPoint.clearLayers();
+    
+  L.circle(e.latlng, {
+    color: "#000",
+    stroke: true,
+    weight:2,
+    opacity:0.5,
+    fillColor: "blue",
+    fillOpacity: 0.25,
+    radius: searchRadius
+  }).addTo(clickedPoint);
 
-    // Add a click event listener to the map to handle user interactions
-    myMap.on('click', function(e) {
-        //clearUserSelections(); // Clear all markers from the map
-        userLocation = e.latlng; // Define userLocation with the clicked point coordinates
+  let selectedPts = [];
+  
+  gpsMarkers.forEach(marker => {
+    const selectedSiteCoords = marker.getLatLng();
+    const distance = userLocation.distanceTo(selectedSiteCoords); //distance in meters
 
-        // Click event listener for the clickedPoint layer group
-        clickedPoint.on('click', function(e) {
-            //clearUserSelections(); // Clear all markers from the map
-            userLocation = e.latlng; // Update userLocation with the clicked point coordinates
-            clickedPoint.clearLayers(); // Clear the clickedPoint layer group
+  if (distance <= searchRadius) {
+    selectedPts.push(selectedSiteCoords);
+    const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
+    
+    console.log(selectedSites.status, selectedSites.address.street);
 
-            // Increment click count
-            clickCount++;
+    if (selectedSites.status === "OPEN") {
+        // Control to show the open stations
+        var userSiteInfo = L.control({position: 'bottomleft'});
+        userSiteInfo.onAdd = function() {
+            var div = L.DomUtil.create('div', 'site-sidebar');
+            div.style.backgroundColor = 'white'; // Add white background color
+            // if (selectedSites.status === "OPEN") {
+                div.innerHTML += "<p>Location open at " + selectedSites.address.street + ", " +
+                    selectedSites.address.city + ", " + selectedSites.address.state + "</p>"
+                return div;
+            // }
+        };
+        userSiteInfo.addTo(myMap);
+        
+    } // end: if selectedSites
+  } //end: if (distance <= searchRadius)
+  }) // end: gpsMarkers.forEach function
 
-            // Update site info if within range
-            let selectedPts = [];
-            gpsMarkers.forEach(marker => {
-                const selectedSiteCoords = marker.getLatLng();
-                const distance = userLocation.distanceTo(selectedSiteCoords);
-                if (distance <= searchRadius) {
-                    const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
-                    if (selectedSites) {
-                        updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
-                    }
-                }
-            });
+}); // end of user click event.
 
-            // Remove the userSiteInfo control after the third click
-            if (clickCount >= 3) {
-                myMap.removeControl(userSiteInfo);
-                clickCount = 0; // Reset click count for future interactions
-            }
-
-            // Add a circle to the clickedPoint layer group
-            L.circle(e.latlng, {
-                color: "#000",
-                weight: 2,
-                opacity: 0.5,
-                fillColor: "blue",
-                fillOpacity: 0.25,
-                radius: searchRadius
-            }).addTo(clickedPoint);
-
-            userSiteInfo.addTo(myMap);
-        });
-    });
-}
+// Stall legend
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
@@ -209,7 +186,7 @@ function onMapClick(e) {
         // Add a bright yellow marker at the start point
         var startMarker = L.marker(startPoint, {
             icon: L.icon({
-                iconUrl: 'Archive/images/icon.png', // You can use a custom icon or change the color here
+                iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png', // You can use a custom icon or change the color here
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -229,7 +206,8 @@ function onMapClick(e) {
         // Reset points for the next calculation
         startPoint = null;
         endPoint = null;
-        }
     }
-    // Add click event listener to the map
-    myMap.on('click', onMapClick);
+}
+
+// Add click event listener to the map
+myMap.on('click', onMapClick);
