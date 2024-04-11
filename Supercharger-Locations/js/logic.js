@@ -79,7 +79,7 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
 }); 
-
+let clickCount = 0; // Initialize click counter
 function clearUserSelections(){
     myMap.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
@@ -94,6 +94,15 @@ myMap.on('click', function(e) {
         clearUserSelections(); // Clear all markers from the map
         userLocation = e.latlng; // Update userLocation with the clicked point coordinates
         clickedPoint.clearLayers(); // Clear the clickedPoint layer group
+        
+        // Increment click count
+        clickCount++;
+
+        // Remove userSiteInfo control after 3 clicks
+        if (clickCount >= 3) {
+            myMap.removeControl(userSiteInfo);
+            clickCount = 0; // Reset click count for future interactions
+        }
     });
     L.circle(e.latlng, {
         color: "#000",
@@ -122,22 +131,21 @@ myMap.on('click', function(e) {
     if (clickedPoint.getLayers().length >= 3) {
         myMap.removeControl(userSiteInfo);
     }
-});
 
-function updateSiteInfo(status, siteName, stallCount) {
-    const userSiteInfo = L.control({ position: 'bottomleft' });
-    userSiteInfo.onAdd = function() {
-        var div = L.DomUtil.create('div', 'site info');
-        div.style.backgroundColor = 'white';
-        div.innerHTML = "<strong>Charger Within Range</strong><br>" +
-            "Status: " + status + "<br>" +
-            "Name: " + siteName + "<br>" +
-            "Available Stalls: " + stallCount + "<br>";
-        return div;
-    };
+    function updateSiteInfo(status, siteName, stallCount) {
+        const userSiteInfo = L.control({ position: 'bottomleft' });
+        userSiteInfo.onAdd = function() {
+            var div = L.DomUtil.create('div', 'site info');
+            div.style.backgroundColor = 'white';
+            div.innerHTML = "<strong>Charger Within Range</strong><br>" +
+                "Status: " + status + "<br>" +
+                "Name: " + siteName + "<br>" +
+                "Available Stalls: " + stallCount + "<br>";
+            return div;
+        };
     userSiteInfo.addTo(myMap);
 }
-
+});
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
