@@ -80,19 +80,21 @@ let myMap = L.map("map", {
     layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
 }); 
 
-myMap.on('click', function(e) {
-    clearUserSelections(){
+function clearUserSelections(){
     myMap.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
             myMap.removeLayer(layer);
         }
     });
 }
+myMap.on('click', function(e) {
     userLocation = e.latlng; // Define userLocation with the clicked point coordinates
-clickedPoint.on('click', function(e) {
-    clearUserSelections();
-    userLocation = e.latlng;
-    clickedPoint.clearLayers();
+    // Click event listener for the clickedPoint layer group
+    clickedPoint.on('click', function(e) {
+        clearUserSelections(); // Clear all markers from the map
+        userLocation = e.latlng; // Update userLocation with the clicked point coordinates
+        clickedPoint.clearLayers(); // Clear the clickedPoint layer group
+    });
 });
     L.circle(e.latlng, {
         color: "#000",
