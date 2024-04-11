@@ -76,13 +76,14 @@ let myMap = L.map("map", {
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
 
-let userSiteInfo; // Declare userSiteInfo outside the click event
-let clickedPoint = L.layerGroup(); // Define clickedPoint as a layer group
+let userSiteInfo = null;
+let clickedPoint = L.layerGroup();
 let userLocation;
-let searchRadius = 1000; // Define searchRadius with a default value
-myMap.on('click', function(e) {
-    clearUserSelections(); // Clear previous selections
-    userLocation = e.latlng; // Define userLocation with the clicked point coordinates
+let searchRadius = 1000;
+
+function handleMapClick(e) {
+    clearUserSelections();
+    userLocation = e.latlng;
     clickedPoint.clearLayers();
     
     L.circle(e.latlng, {
@@ -96,39 +97,36 @@ myMap.on('click', function(e) {
     }).addTo(clickedPoint);
 
     let selectedPts = [];
-
     gpsMarkers.forEach(marker => {
         const selectedSiteCoords = marker.getLatLng();
-        const distance = userLocation.distanceTo(selectedSiteCoords); // Distance in meters
+        const distance = userLocation.distanceTo(selectedSiteCoords);
 
         if (distance <= searchRadius) {
             selectedPts.push(selectedSiteCoords);
-
             const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
-
             if (selectedSites) {
                 updateSiteInfo(selectedSites.name, selectedSites.stallCount);
             }
         }
     });
-});
+}
 
 function updateSiteInfo(siteName, stallCount) {
-    if (userSiteInfo) {
-        userSiteInfo.getContainer().innerHTML = "<h3>Charger Within Range</h3>" +
-            "<p>Name: " + siteName + "</p>" +
-            "<p>Available Stalls: " + stallCount + "</p>";
-    } else {
+    if (!userSiteInfo) {
         userSiteInfo = L.control({ position: 'bottomleft' });
         userSiteInfo.onAdd = function() {
             var div = L.DomUtil.create('div', 'site info');
-            div.style.backgroundColor = 'white'; // Add white background color
+            div.style.backgroundColor = 'white';
             div.innerHTML = "<h3>Charger Within Range</h3>" +
                 "<p>Name: " + siteName + "</p>" +
                 "<p>Available Stalls: " + stallCount + "</p>";
             return div;
         };
         userSiteInfo.addTo(myMap);
+    } else {
+        userSiteInfo.getContainer().innerHTML = "<h3>Charger Within Range</h3>" +
+            "<p>Name: " + siteName + "</p>" +
+            "<p>Available Stalls: " + stallCount + "</p>";
     }
 }
 
@@ -181,4 +179,42 @@ function scColor(stall_count) {
     } else if (stall_count <= 36) {
         return '#f6008a'
     } else { return '#800080' } 
+}
+
+// Function to calculate distance between two points
+function calculateDistance(point1, point2) {
+    var distanceKm = point1.distanceTo(point2) / 1000; // Distance in kilometers
+    var distanceMiles = distanceKm * 0.621371; // Convert kilometers to miles
+    return distanceMiles;
+}
+
+// Function to handle click events on the map
+function onMapClick(e) {
+    if (!startPoint) {
+        startPoint = e.latlng;
+        
+        // Add a bright yellow marker at the start point
+        var startMarker = L.marker(startPoint, {
+            icon: L.icon({
+                iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png', // You can use a custom icon or change the color here
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            })
+        }).addTo(myMap);
+
+        alert("Start point set!");
+    } else if (!endPoint) {
+        endPoint = e.latlng;
+        alert("End point set!");
+
+        // Calculate distance between two points
+        var distance = calculateDistance(startPoint, endPoint);
+        alert("Distance between points: " + distance.toFixed(2) + " miles");
+
+        // Reset points for the next calculation
+        startPoint = null;
+        endPoint = null;
+    }
 }
