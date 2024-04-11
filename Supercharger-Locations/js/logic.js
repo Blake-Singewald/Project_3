@@ -125,7 +125,7 @@ function clearUserSelections() {
         });
         var overlayMaps = {     
             "SuperChargers": gpsLayer,
-            "National Parks": NationalParksLayer.
+            "National Parks": NationalParksLayer,
             "Within 31 Miles of Supercharger": clickedPoint
         }; 
         L.control.layers(baseMaps, overlayMaps).addTo(myMap);
