@@ -213,4 +213,3 @@ function onMapClick(e) {
     }
     // Add click event listener to the map
     myMap.on('click', onMapClick);
-});
