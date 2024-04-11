@@ -220,3 +220,7 @@ function onMapClick(e) {
 
 // Add click event listener to the map
 myMap.on('click', onMapClick);
+// To reset the click event, you can remove the existing click event listener
+function resetClickEvent() {
+    myMap.off('click', onMapClick);
+}
