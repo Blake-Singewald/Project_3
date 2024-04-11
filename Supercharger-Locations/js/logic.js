@@ -79,7 +79,6 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
 }); 
-let clickCount = 0;
 
 clickedPoint.on('click', function(e) {
     clearUserSelections();
@@ -107,12 +106,9 @@ clickedPoint.on('click', function(e) {
             }
         }
     });
-    clickCount++; // Increment the click count
-
-    if (clickCount === 4) {
-        // Remove the userSiteInfo control after the third click
+    // Remove the userSiteInfo control after the third click
+    if (clickedPoint.getLayers().length >= 3) {
         myMap.removeControl(userSiteInfo);
-        clickCount = 0; // Reset the click count
     }
 });
 
