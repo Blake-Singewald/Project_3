@@ -129,7 +129,15 @@ function updateSiteInfo(siteName, stallCount) {
         userSiteInfo.addTo(myMap);
     }
 }
+function clearUserSelections() {
+    // Clear any previous selections or user interactions
+    clickedPoint.clearLayers(); // Clear the clickedPoint layer group
 
+    if (userSiteInfo) {
+        myMap.removeControl(userSiteInfo); // Remove the userSiteInfo control if it exists
+        userSiteInfo = null; // Reset the userSiteInfo variable
+    }
+}
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
