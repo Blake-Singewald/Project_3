@@ -79,7 +79,9 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer, clickedPoint] // Set the default base layers 
 }); 
-myMap.on('click', function(e) {
+let clickCount = 0;
+
+clickedPoint.on('click', function(e) {
     clearUserSelections();
     userLocation = e.latlng;
     clickedPoint.clearLayers();
@@ -105,6 +107,13 @@ myMap.on('click', function(e) {
             }
         }
     });
+    clickCount++; // Increment the click count
+
+    if (clickCount === 3) {
+        // Remove the userSiteInfo control after the third click
+        myMap.removeControl(userSiteInfo);
+        clickCount = 0; // Reset the click count
+    }
 });
 
 function updateSiteInfo(status, siteName, stallCount) {
@@ -202,11 +211,4 @@ function onMapClick(e) {
         endPoint = null;
     }
 }
-// Add click event listener to the map
-myMap.on('click', onMapClick);
 
-clickedPoint.on('click', function(event) {
-    // Reset data for the clicked overlay here
-    console.log('Overlay clicked, resetting data...');
-    clickedPoint.clearLayers();
-});
