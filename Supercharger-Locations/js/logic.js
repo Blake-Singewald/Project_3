@@ -49,10 +49,13 @@ d3.json(url).then(function(response) {
                 opacity: 0.5
             });
             // Bind a popup to the circleMarker
-            circleMarker.bindTooltip(`<strong>Place: </strong> ${site.name}<br><strong>Stall Count: </strong>${site.stallCount}`);
+            circleMarker.bindTooltip(`<strong>Status: </strong>${site.status}<br><strong>Address: </strong>${site.address.street}
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${site.address.city}<strong>, </strong>${site.address.state}<strong>, </strong>${site.address.zip}<br><strong>Stall Count: </strong>${site.stallCount}`);
             // Add the circleMarker to the gpsMarkers array
             gpsMarkers.push(circleMarker);     
         });
+
 
         gpsMarkers.forEach(function(marker) {
             gpsLayer.addLayer(marker); // Add each circleMarker to gpsLayer
@@ -72,13 +75,21 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
-   
+
+function clearUserSelections() {
+    clickedPoint.clearLayers();
+    // Remove any additional information displayed on the map
+    // Add any other clearing actions here if needed
+}   
 
 // Add a circle marker to map
 let userLocation;
 const searchRadius = 80467; // distance in meters ~50mi
 const clickedPoint = L.layerGroup().addTo(myMap);
-
+myMap.on('click', function(e) {
+    clearUserSelections(); // Clear previous selections
+    // Rest of the click event handling code
+});
 myMap.on('click', function(e) {
   userLocation = e.latlng;
   
