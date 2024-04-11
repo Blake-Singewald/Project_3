@@ -105,6 +105,7 @@ function updateSiteInfo(status, siteName, stallCount) {
 
     // Add a click event listener to the map to handle user interactions
     myMap.on('click', function(e) {
+        clearUserSelections(); // Clear all markers from the map
         userLocation = e.latlng; // Define userLocation with the clicked point coordinates
 
         // Click event listener for the clickedPoint layer group
@@ -126,7 +127,7 @@ function updateSiteInfo(status, siteName, stallCount) {
                     if (selectedSites) {
                         updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
                     }
-                } 
+                }
             });
 
             // Remove the userSiteInfo control after the third click
@@ -138,13 +139,13 @@ function updateSiteInfo(status, siteName, stallCount) {
             // Add a circle to the clickedPoint layer group
             L.circle(e.latlng, {
                 color: "#000",
-                stroke: true,
                 weight: 2,
                 opacity: 0.5,
                 fillColor: "blue",
                 fillOpacity: 0.25,
                 radius: searchRadius
             }).addTo(clickedPoint);
+
             userSiteInfo.addTo(myMap);
         });
     });
