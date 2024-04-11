@@ -79,7 +79,7 @@ let myMap = L.map("map", {
 let userSiteInfo; // Declare userSiteInfo outside the click event
 let clickedPoint = L.layerGroup(); // Define clickedPoint as a layer group
 let userLocation;
-
+let searchRadius = 1000; // Define searchRadius with a default value
 myMap.on('click', function(e) {
     clearUserSelections(); // Clear previous selections
     userLocation = e.latlng; // Define userLocation with the clicked point coordinates
