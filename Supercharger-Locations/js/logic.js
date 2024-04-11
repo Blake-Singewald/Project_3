@@ -75,6 +75,20 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
+// Example of batching DOM operations
+setTimeout(function() {
+    // Perform DOM operations within a single batch
+    let container = document.getElementById('container');
+    let fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < 10; i++) {
+        let div = document.createElement('div');
+        div.textContent = 'Element ' + i;
+        fragment.appendChild(div);
+    }
+
+    container.appendChild(fragment);
+}, 500); // Adjust timeout duration as needed
 
 let userSiteInfo; // Declare userSiteInfo outside the click event
 let clickedPoint = L.layerGroup(); // Define clickedPoint as a layer group
