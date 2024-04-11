@@ -5,6 +5,9 @@ var NationalParksLayer = L.layerGroup(); // Declare NationalParksLayer variable
 var gpsLayer = L.layerGroup(); // Declare gpsLayer variable
 var gpsMarkers = []; // Define gpsMarkers array
 var npMarkers = []; // Define gpsMarkers array
+let chargingSites = []; // Variable to store reponse data for later click event
+var startPoint = null;
+var endPoint = null;
 // Define base layers 
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {     
     attribution: '© OpenStreetMap contributors' 
@@ -26,12 +29,13 @@ d3.csv('/Project_3/Archive/national_parks.csv').then(function(data) {
     NationalParksLayer.addLayer(marker); // Add the marker to NationalParksLayer
   });
 });
+
+
 // Fetch data from the API using d3.json 
 d3.json(url).then(function(response) {     
-   // console.log(response); // Check the response data
-    
-    if (response && Array.isArray(response)) {
-        response.forEach(function(site) {
+    if (response && Array.isArray(response)) {       
+        response.forEach(function(site) { 
+            chargingSites.push(site); // Store response in a variable for later click event use.
             //console.log(site.name);
             var latLng = L.latLng(site.gps.latitude, site.gps.longitude);
             var radius = markerSize(site.stallCount);         
@@ -68,16 +72,18 @@ let myMap = L.map("map", {
     zoom: 5,     
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
+   
 
 // Add a circle marker to map
 let userLocation;
-const searchRadius = 50000;
+const searchRadius = 50000; // distance in meters ~50mi
 const clickedPoint = L.layerGroup().addTo(myMap);
 
 myMap.on('click', function(e) {
   userLocation = e.latlng;
-
+  
   clickedPoint.clearLayers();
+  
   L.circle(e.latlng, {
     color: "#000",
     stroke: true,
@@ -88,9 +94,35 @@ myMap.on('click', function(e) {
     radius: searchRadius
   }).addTo(clickedPoint);
 
-  myMap.flyTo(userLocation, 9);
+//   myMap.flyTo(userLocation, 9);
+
+  let selectedPts = [];
+
+  gpsMarkers.forEach(marker => {
+    const selectedSiteCoords = marker.getLatLng();
+    const distance = userLocation.distanceTo(selectedSiteCoords); //distance in meters
+
+  if (distance <= searchRadius) {
+    selectedPts.push(selectedSiteCoords);
+    const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng)
+    if (selectedSites) {
+        let userSiteInfo = L.control({position: 'bottomleft'});
+        userSiteInfo.onAdd = function() {
+            var div = L.DomUtil.create('div', 'site info');
+            // div.innerHTML.empty();
+            div.innerHTML = "<h3>Charger Within Range</h3>";
+            div.innerHTML += "<p>Name: " + selectedSites.name + "</p>" +
+                "<p>Available Stalls: " + selectedSites.stallCount + "</p>";
+            return div;
+        };
+        userSiteInfo.addTo(myMap);
+        console.log(selectedSites.name, selectedSites.stallCount);
+    }
+  }
   
-})
+  })
+
+}) // end of user click event.
 
 
     var legend = L.control({position: 'bottomright'});
@@ -113,6 +145,8 @@ myMap.on('click', function(e) {
         // Multiply the stall count by 200 to make the radius 200 times bigger
         return stall_count * 200;
     }
+
+// Stall legend
 function scColor(stall_count) {
     if (stall_count <= 6) {
         return '#a7fb09'
@@ -134,3 +168,44 @@ function scColor(stall_count) {
         return '#f6008a'
     } else { return '#800080' } 
 }
+
+// Function to calculate distance between two points
+function calculateDistance(point1, point2) {
+    var distanceKm = point1.distanceTo(point2) / 1000; // Distance in kilometers
+    var distanceMiles = distanceKm * 0.621371; // Convert kilometers to miles
+    return distanceMiles;
+}
+
+// Function to handle click events on the map
+function onMapClick(e) {
+    if (!startPoint) {
+        startPoint = e.latlng;
+        
+        // Add a bright yellow marker at the start point
+        var startMarker = L.marker(startPoint, {
+            icon: L.icon({
+                iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png', // You can use a custom icon or change the color here
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            })
+        }).addTo(myMap);
+
+        alert("Start point set!");
+    } else if (!endPoint) {
+        endPoint = e.latlng;
+        alert("End point set!");
+
+        // Calculate distance between two points
+        var distance = calculateDistance(startPoint, endPoint);
+        alert("Distance between points: " + distance.toFixed(2) + " miles");
+
+        // Reset points for the next calculation
+        startPoint = null;
+        endPoint = null;
+    }
+}
+
+// Add click event listener to the map
+myMap.on('click', onMapClick);
