@@ -82,7 +82,7 @@ let myMap = L.map("map", {
 let clickCount = 0;
 
 clickedPoint.on('click', function(e) {
-    clearUserSelections();
+    //clearUserSelections();
     userLocation = e.latlng;
     clickedPoint.clearLayers();
 
@@ -109,7 +109,7 @@ clickedPoint.on('click', function(e) {
     });
     clickCount++; // Increment the click count
 
-    if (clickCount === 3) {
+    if (clickCount === 4) {
         // Remove the userSiteInfo control after the third click
         myMap.removeControl(userSiteInfo);
         clickCount = 0; // Reset the click count
