@@ -1,4 +1,6 @@
 var url = 'https://supercharge.info/service/supercharge/allSites'; 
+var startPoint = null;
+var endPoint = null;
 // Create overlay layers 
 var npLayer = L.layerGroup(); // Declare npLayer variable  
 var NationalParksLayer = L.layerGroup(); // Declare NationalParksLayer variable
