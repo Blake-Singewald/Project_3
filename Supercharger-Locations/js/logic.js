@@ -108,6 +108,7 @@ myMap.on('click', function(e) {
                 userSiteInfo = L.control({ position: 'bottomleft' });
                 userSiteInfo.onAdd = function() {
                     var div = L.DomUtil.create('div', 'site info');
+                    div.style.backgroundColor = 'white'; // Add white background color
                     div.innerHTML = "<h3>Charger Within Range</h3>";
                     div.innerHTML += "<p>Name: " + selectedSites.name + "</p>" +
                         "<p>Available Stalls: " + selectedSites.stallCount + "</p>";
