@@ -205,13 +205,8 @@ function onMapClick(e) {
 // Add click event listener to the map
 myMap.on('click', onMapClick);
 
-function clearUserSelections() {
-    // Clear any previous selections or user interactions
-    clickedPoint.clearLayers(); // Clear the clickedPoint layer group
-
-    if (userSiteInfo) {
-        myMap.removeControl(userSiteInfo); // Remove the userSiteInfo control if it exists
-        userSiteInfo = null; // Reset the userSiteInfo variable
-    }
-}
-
+clickedPoint.on('click', function(event) {
+    // Reset data for the clicked overlay here
+    console.log('Overlay clicked, resetting data...');
+    clickedPoint.clearLayers();
+});
