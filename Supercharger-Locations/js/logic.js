@@ -124,15 +124,14 @@ myMap.on('click', function(e) {
                     updateSiteInfo(selectedSites.status, selectedSites.name, selectedSites.stallCount);
                 }
             }
-        });
-        userSiteInfo.addTo(myMap);
-        }
-        // Remove the userSiteInfo control after the third click
-        if (clickCount >= 3) {
-            myMap.removeControl(userSiteInfo);
-            clickCount = 0; // Reset click count for future interactions
-        }
+
+            // Remove the userSiteInfo control after the third click
+            if (clickCount >= 3) {
+                myMap.removeControl(userSiteInfo);
+                clickCount = 0; // Reset click count for future interactions
+            }
     });
+    userSiteInfo.addTo(myMap);
 
     // Add a circle to the clickedPoint layer group
     L.circle(e.latlng, {
