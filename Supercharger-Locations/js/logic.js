@@ -11,7 +11,7 @@ var endPoint = null;
 let userSiteInfo = null;
 let clickedPoint = L.layerGroup();
 let userLocation;
-let searchRadius = 1000;
+let searchRadius = 50000;
 // Define base layers 
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {     
     attribution: '© OpenStreetMap contributors' 
