@@ -76,67 +76,6 @@ let myMap = L.map("map", {
     layers: [street, gpsLayer, NationalParksLayer] // Set the default base layers 
 }); 
 
-let userSiteInfo = null;
-let clickedPoint = L.layerGroup();
-let userLocation;
-let searchRadius = 1000;
-
-myMap.on('click', function(e) {
-    clearUserSelections();
-    userLocation = e.latlng;
-    clickedPoint.clearLayers();
-
-    L.circle(e.latlng, {
-        color: "#000",
-        stroke: true,
-        weight: 2,
-        opacity: 0.5,
-        fillColor: "blue",
-        fillOpacity: 0.25,
-        radius: searchRadius
-    }).addTo(clickedPoint);
-
-    let selectedPts = [];
-    gpsMarkers.forEach(marker => {
-        const selectedSiteCoords = marker.getLatLng();
-        const distance = userLocation.distanceTo(selectedSiteCoords);
-
-        if (distance <= searchRadius) {
-            selectedPts.push(selectedSiteCoords);
-            const selectedSites = chargingSites.find(site => site.gps.latitude === selectedSiteCoords.lat && site.gps.longitude === selectedSiteCoords.lng);
-            if (selectedSites) {
-                updateSiteInfo(selectedSites.name, selectedSites.stallCount);
-            }
-        }
-    });
-});
-
-function updateSiteInfo(siteName, stallCount) {
-    if (!userSiteInfo) {
-        userSiteInfo = L.control({ position: 'bottomleft' });
-        userSiteInfo.onAdd = function() {
-            var div = L.DomUtil.create('div', 'site info');
-            div.style.backgroundColor = 'white';
-            div.innerHTML = "<h3>Charger Within Range</h3>" +
-                "<p>Name: " + siteName + "</p>" +
-                "<p>Available Stalls: " + stallCount + "</p>";
-            return div;
-        };
-        userSiteInfo.addTo(myMap);
-    } else {
-        userSiteInfo.getContainer().innerHTML = "<h3>Charger Within Range</h3>" +
-            "<p>Name: " + siteName + "</p>" +
-            "<p>Available Stalls: " + stallCount + "</p>";
-    }
-}
-
-function clearUserSelections() {
-    clickedPoint.clearLayers();
-    if (userSiteInfo) {
-        myMap.removeControl(userSiteInfo);
-        userSiteInfo = null;
-    }
-}
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'info legend');
