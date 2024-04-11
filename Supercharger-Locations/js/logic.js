@@ -82,7 +82,7 @@ let myMap = L.map("map", {
 let clickCount = 0;
 
 clickedPoint.on('click', function(e) {
-    //clearUserSelections();
+    clearUserSelections();
     userLocation = e.latlng;
     clickedPoint.clearLayers();
 
@@ -189,7 +189,7 @@ function onMapClick(e) {
         // Add a bright yellow marker at the start point
         var startMarker = L.marker(startPoint, {
             icon: L.icon({
-                iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png', // You can use a custom icon or change the color here
+                iconUrl: 'Project_3/Archive/images.png'', // You can use a custom icon or change the color here
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
